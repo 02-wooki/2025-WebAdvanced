@@ -32,7 +32,6 @@
       background-color: #fff;
       border-radius: 15px;
 
-      transform: scale(1.0);
       transition: all 0.5s ease;
 
       box-shadow: 0px 0px 10px -3px #000;
@@ -42,7 +41,6 @@
     section:hover {
       box-shadow: 0px 0px 40px -5px #000;
 
-      transform: scale(1.03);
       transition: all 0.5s ease;
     }
 
@@ -64,6 +62,8 @@
 
       overflow: hidden;
       object-fit: cover;
+
+      cursor: pointer;
     }
 
     .profileImgContainer img {
@@ -139,6 +139,8 @@
       
       border-radius: 15px;
       border: 0px solid black;
+
+      cursor: pointer;
     }
 
     .disAbled {
@@ -167,11 +169,38 @@
       transform: scale(1.05) translateX(30px);
       transition: all ease 0.5s;
     }
-
-    
   </style>
+  <script>
+    let cards;
+    let targetCard;
+    
+    const setup = () => {
+      cards = document.getElementsByTagName('section');
+      for (const card of cards) {
+        card.addEventListener('mousemove', (e) => rotateCard(e));
+        card.addEventListener('mouseenter', (e) => {
+          targetCard = e.target;
+        })
+        card.addEventListener('mouseleave', (e) => {
+          targetCard.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+          targetCard = undefined;
+        })
+      }
+    }
+
+    const rotateCard = (e) => {
+      let mouseX = e.offsetX;
+      let mouseY = e.offsetY;
+      
+      let centerCardX = e.target.offsetWidth / 2 - mouseX;
+      let centerCardY = e.target.offsetHeight / 2 - mouseY;
+
+      if (targetCard)
+        targetCard.style.transform = `perspective(4000px) rotateX(${-(centerCardY/24)}deg) rotateY(${(centerCardX/34)}deg) scale(1.03)`;
+    }
+  </script>
 </head>
-<body>
+<body onload="setup()">
   <div class="appContainer">
     <section class="profile">
       <div class="profileImgContainer">
